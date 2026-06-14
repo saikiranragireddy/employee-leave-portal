@@ -1,8 +1,16 @@
 ---
+- name: Add Corretto repo
+  command: rpm --import https://yum.corretto.aws/corretto.key
+
+- name: Add Corretto yum repo
+  get_url:
+    url: https://yum.corretto.aws/corretto.repo
+    dest: /etc/yum.repos.d/corretto.repo
+
 - name: Install Java 21
-  command: yum install -y java-21-amazon-corretto-headless
+  command: yum install -y java-21-amazon-corretto-devel
   args:
-    creates: /usr/lib/jvm/java-21-amazon-corretto.x86_64
+    creates: /usr/lib/jvm/java-21-amazon-corretto
 
 - name: Add Jenkins repo
   get_url:
