@@ -1,8 +1,8 @@
 ---
 - name: Install Java 21
-  dnf:
-    name: java-21-amazon-corretto-headless
-    state: present
+  command: yum install -y java-21-amazon-corretto-headless
+  args:
+    creates: /usr/lib/jvm/java-21-amazon-corretto.x86_64
 
 - name: Add Jenkins repo
   get_url:
@@ -10,49 +10,44 @@
     dest: /etc/yum.repos.d/jenkins.repo
 
 - name: Import Jenkins GPG key
-  rpm_key:
-    key: https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
-    state: present
+  command: rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
 
 - name: Install Jenkins
-  dnf:
-    name: jenkins
-    state: present
+  command: yum install -y jenkins
+  args:
+    creates: /usr/bin/jenkins
 
 - name: Install Docker
-  dnf:
-    name: docker
-    state: present
+  command: yum install -y docker
+  args:
+    creates: /usr/bin/docker
 
 - name: Install Maven
-  dnf:
-    name: maven
-    state: present
+  command: yum install -y maven
+  args:
+    creates: /usr/bin/mvn
 
 - name: Install Git
-  dnf:
-    name: git
-    state: present
+  command: yum install -y git
+  args:
+    creates: /usr/bin/git
 
 - name: Add jenkins to docker group
-  user:
+  command: usermod -aG docker jenkins
+
+- name: Start and enable Jenkins
+  systemd:
     name: jenkins
-    groups: docker
-    append: yes
+    state: started
+    enabled: yes
+
+- name: Start and enable Docker
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
 
 - name: Fix docker socket permissions
   file:
     path: /var/run/docker.sock
     mode: '0666'
-
-- name: Start Jenkins
-  systemd:
-    name: jenkins
-    state: started
-    enabled: yes
-
-- name: Start Docker
-  systemd:
-    name: docker
-    state: started
-    enabled: yes

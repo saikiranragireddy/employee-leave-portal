@@ -1,8 +1,8 @@
 ---
 - name: Install Docker
-  yum:
-    name: docker
-    state: present
+  command: yum install -y docker
+  args:
+    creates: /usr/bin/docker
 
 - name: Start Docker
   systemd:
@@ -11,9 +11,9 @@
     enabled: yes
 
 - name: Install awscli
-  yum:
-    name: awscli
-    state: present
+  command: yum install -y awscli
+  args:
+    creates: /usr/bin/aws
 
 - name: Download kubectl
   get_url:

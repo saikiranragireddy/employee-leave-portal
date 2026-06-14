@@ -1,8 +1,8 @@
 ---
 - name: Install Docker
-  yum:
-    name: docker
-    state: present
+  command: yum install -y docker
+  args:
+    creates: /usr/bin/docker
 
 - name: Start Docker
   systemd:
