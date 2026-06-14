@@ -49,7 +49,7 @@ resource "aws_security_group" "k8s_sg" {
 # Jenkins Server
 resource "aws_instance" "jenkins" {
   ami                    = var.ami_id
-  instance_type          = "t2.medium"
+  instance_type          = var.instance_type
   key_name               = "devops-key"
   vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
   tags = { Name = "Jenkins-Server" }
@@ -58,7 +58,7 @@ resource "aws_instance" "jenkins" {
 # K8s Master
 resource "aws_instance" "k8s_master" {
   ami                    = var.ami_id
-  instance_type          = "t2.medium"
+  instance_type          = var.instance_type
   key_name               = "devops-key"
   vpc_security_group_ids = [aws_security_group.k8s_sg.id]
   tags = { Name = "K8s-Master" }
@@ -67,7 +67,7 @@ resource "aws_instance" "k8s_master" {
 # K8s Worker 1
 resource "aws_instance" "k8s_worker1" {
   ami                    = var.ami_id
-  instance_type          = "t2.medium"
+  instance_type          = var.instance_type
   key_name               = "devops-key"
   vpc_security_group_ids = [aws_security_group.k8s_sg.id]
   tags = { Name = "K8s-Worker-1" }
@@ -76,7 +76,7 @@ resource "aws_instance" "k8s_worker1" {
 # K8s Worker 2
 resource "aws_instance" "k8s_worker2" {
   ami                    = var.ami_id
-  instance_type          = "t2.medium"
+  instance_type          = var.instance_type
   key_name               = "devops-key"
   vpc_security_group_ids = [aws_security_group.k8s_sg.id]
   tags = { Name = "K8s-Worker-2" }
