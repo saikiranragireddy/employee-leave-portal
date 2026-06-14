@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: leave-portal
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: leave-portal
+  template:
+    metadata:
+      labels:
+        app: leave-portal
+    spec:
+      containers:
+      - name: leave-portal
+        image: kiran21sai/employee-leave-portal:latest
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"

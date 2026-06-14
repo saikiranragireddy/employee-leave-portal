@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Leave Requests</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            min-height: 100vh;
+        }
+        .header {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .header h1 { color: #e94560; font-size: 24px; }
+        .header a {
+            color: #fff;
+            text-decoration: none;
+            background: #e94560;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        .container { padding: 40px; }
+        table { width: 100%; border-collapse: collapse; background: rgba(255,255,255,0.05); border-radius: 12px; overflow: hidden; }
+        thead { background: rgba(233,69,96,0.3); }
+        th { padding: 16px; color: #fff; text-align: left; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+        td { padding: 14px 16px; color: #ccc; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        tr:hover td { background: rgba(255,255,255,0.03); }
+        .badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .PENDING { background: rgba(255,193,7,0.2); color: #ffc107; }
+        .APPROVED { background: rgba(40,167,69,0.2); color: #28a745; }
+        .REJECTED { background: rgba(220,53,69,0.2); color: #dc3545; }
+        .btn { padding: 6px 14px; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; margin-right: 6px; }
+        .btn-approve { background: #28a745; color: white; }
+        .btn-reject { background: #dc3545; color: white; }
+        .btn:hover { opacity: 0.8; }
+        .empty { text-align: center; color: #666; padding: 60px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏢 Employee Leave Portal</h1>
+        <a href="/">+ New Request</a>
+    </div>
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>ID</th>
+                    <th>Leave Type</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${#lists.isEmpty(requests)}">
+                    <td colspan="8" class="empty">No leave requests yet.</td>
+                </tr>
+                <tr th:each="req : ${requests}">
+                    <td th:text="${req.employeeName}"></td>
+                    <td th:text="${req.employeeId}"></td>
+                    <td th:text="${req.leaveType}"></td>
+                    <td th:text="${req.fromDate}"></td>
+                    <td th:text="${req.toDate}"></td>
+                    <td th:text="${req.reason}"></td>
+                    <td>
+                        <span class="badge" th:classappend="${req.status}" th:text="${req.status}"></span>
+                    </td>
+                    <td th:if="${req.status == 'PENDING'}">
+                        <form th:action="@{/approve/{id}(id=${req.id})}" method="post" style="display:inline">
+                            <button class="btn btn-approve">✓ Approve</button>
+                        </form>
+                        <form th:action="@{/reject/{id}(id=${req.id})}" method="post" style="display:inline">
+                            <button class="btn btn-reject">✗ Reject</button>
+                        </form>
+                    </td>
+                    <td th:if="${req.status != 'PENDING'}">—</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
