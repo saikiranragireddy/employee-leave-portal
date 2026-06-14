@@ -1,6 +1,6 @@
 ---
 - name: Install Docker
-  dnf:
+  yum:
     name: docker
     state: present
 

@@ -1,6 +1,6 @@
 ---
 - name: Install Docker
-  dnf:
+  yum:
     name: docker
     state: present
 
@@ -11,7 +11,7 @@
     enabled: yes
 
 - name: Install awscli
-  dnf:
+  yum:
     name: awscli
     state: present
 
